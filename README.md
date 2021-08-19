@@ -3,9 +3,9 @@
 
 ## Description
 
-For this project I modified starter code to create an application called note-taker that can be used to write and save notes. This application uses an Express.js back end, saves, and retrieves note data from a JSON file.
+For this project I modified starter code to create an application called note-taker that can be used to write, save, and delete notes. This application uses an Express.js back end, saves, and retrieves note data from a JSON file.
 
-The application’s front end was already created. I built the back end, connect the two, and then deployed the entire application to Heroku.
+The application’s front end was already created. I built the back end, connected the two, and then deployed the entire application to a GitHub URL.
 
 
 ## User Story
