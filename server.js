@@ -1,21 +1,23 @@
-// server launchpad
-
+// Server launchpad
 const express = require('express');
 
-//instantiate express
-const app = express();
+// Server routes
+const apiRoutes = require('./routes/apiRoutes');
+const htmlRoutes = require('./routes/htmlRoutes');
 
+// Instantiate Express
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static('public'));
-app.use(express.urlencoded({extended:true}));
+// Set up functionality
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-require('./routes/apiRoutes')(app);
-require('./routes/htmlRoutes')(app);
+// Use these routes
+app.use('/api', apiRoutes);
+app.use('/', htmlRoutes);
 
-app.listen(PORT, () => {
-    console.log(`App listening on PORT: ${PORT}`);
-  });
-
+// Start server
+app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
 

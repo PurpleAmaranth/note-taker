@@ -1,32 +1,39 @@
+// Define Store requirements
 const util = require('util');
 const fs = require('fs');
 const uuidv1 = require('uuid/v1');
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
+// Define Store class and methods
 class Store {
+  // Read note file
   read() {
     return readFileAsync('db/db.json', 'utf8');
   }
 
+  // Write note file
   write(note) {
     return writeFileAsync('db/db.json', JSON.stringify(note));
   }
 
-  getNote() {
-    return this.read().then((note) => {
-      let parseNote;
+  // Get notes unpack array if possible
+  getNotes() {
+    return this.read().then((notes) => {
+      let packedNotes;
 
       try {
-        parseNote = [].concat(JSON.parse(note));
+        packedNotes = [].concat(JSON.parse(notes));
       } catch (err) {
-        parseNote = [];
+        packedNotes = [];
       }
 
-      return parseNote;
+      return packedNotes;
     });
   }
 
+  // Add a new note or throw error for blank fields
+  // Then return new notes with unique ids
   addNote(note) {
     const { title, text } = note;
     const newNote = { title, text, id: uuidv1() };
@@ -37,14 +44,15 @@ class Store {
 
     return this.getNotes()
       .then((notes) => [...notes, newNote])
-      .then((updatedNotes) => this.write(updatedNotes))
+      .then((newNotes) => this.write(newNotes))
       .then(() => newNote);
   }
 
+  // Remove unwanted notes
   removeNote(id) {
-    return this.getNote()
-      .then((note) => note.filter((note) => note.id !== id))
-      .then((noteFilter) => this.write(noteFilter));
+    return this.getNotes()
+      .then((notes) => notes.filter((note) => note.id !== id))
+      .then((cleanedNotes) => this.write(cleanedNotes));
   }
 }
 
